@@ -1,4 +1,4 @@
-from sqlalchemy import Column, create_engine
+from sqlalchemy import Column, create_engine, MetaData
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 from sqlalchemy.ext.declarative import declarative_base
@@ -27,3 +27,15 @@ class Todo(Base):
     title = Column(String)
     description = Column(TEXT)
     created_at = Column(DateTime, default=func.now())
+
+
+# Create Table
+metadata = MetaData(Engine)
+Base.metadata.create_all(bind=Engine, checkfirst=True)
+
+
+# model to dict
+
+
+def to_dict(model) -> dict:
+    return dict((col.name, getattr(model, col.name)) for col in model.__table__.columns)
