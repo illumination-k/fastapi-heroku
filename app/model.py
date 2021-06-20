@@ -6,7 +6,9 @@ from sqlalchemy.sql.functions import func
 from sqlalchemy.sql.sqltypes import DateTime, Integer, String, TEXT
 
 Engine = create_engine(
-    "postgresql://postgres:postgres@postgres:5432/main", encoding="utf-8", echo=False
+    "postgresql://postgres:postgres@postgres-heroku:5432/main",
+    encoding="utf-8",
+    echo=False,
 )
 
 db_session = scoped_session(
