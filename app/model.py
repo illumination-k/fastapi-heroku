@@ -5,11 +5,23 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql.functions import func
 from sqlalchemy.sql.sqltypes import DateTime, Integer, String, TEXT
 
-Engine = create_engine(
-    "postgresql://postgres:postgres@postgres-heroku:5432/main",
-    encoding="utf-8",
-    echo=False,
-)
+
+def create_new_engine():
+    import os
+
+    database_url = os.environ.get("DATABASE_URL")
+
+    if database_url is None:
+        uri = "postgresql://postgres:postgres@postgres-heroku:5432/main"
+        echo = True
+    else:
+        uri = database_url.replace("postgres", "postgresql")
+        echo = False
+
+        return create_engine(url=uri, encoding="utf-8", echo=echo)
+
+
+Engine = create_new_engine()
 
 db_session = scoped_session(
     sessionmaker(autocommit=False, autoflush=False, bind=Engine)
